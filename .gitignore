@@ -62,3 +62,5 @@ lint/tmp/
 app/src/main/.DS_Store
 app/src/.DS_Store
 .idea/checkstyle-idea.xml
+.idea/codeStyles/Project.xml
+.idea
