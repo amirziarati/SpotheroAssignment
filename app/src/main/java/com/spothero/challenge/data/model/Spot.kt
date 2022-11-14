@@ -11,4 +11,4 @@ data class Spot(
     val distance: String,
     @SerialName("facility_photo") var facilityPhoto: String,
     val price: Long
-)
+) : java.io.Serializable

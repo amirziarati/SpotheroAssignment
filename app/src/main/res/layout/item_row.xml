@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:padding="10dp">
+    <!--   some of margins and text sizes don't seem right.
+           but I did it exactly based on README file acceptance criteria-->
+    <ImageView
+        android:id="@+id/imgSpot"
+        android:layout_width="wrap_content"
+        android:layout_height="72dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/parking_spot_image_description"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tvDistance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/imgSpot"
+        app:layout_constraintTop_toTopOf="@id/imgSpot"
+        tools:text="125 oakwood rd" />
+
+    <!-- normally SP is used only for text sizes,
+         but based on criteria, its used for margin start here-->
+    <TextView
+        android:id="@+id/tvDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16sp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/tvPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/imgSpot"
+        app:layout_constraintTop_toBottomOf="@id/tvAddress"
+        tools:text="0.2 mi" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20pt"
+        android:textSize="16pt"
+        app:layout_constraintBottom_toBottomOf="@id/imgSpot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/imgSpot"
+        app:layout_constraintTop_toBottomOf="@id/tvDistance"
+        tools:text="14$" />
+</androidx.constraintlayout.widget.ConstraintLayout>

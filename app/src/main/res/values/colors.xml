@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--    I could change these to achieve desired colors in ActionBar, StatusBar and so on
+but I didn't want other parts of the app be affected since these colors are used all over the app-->
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="spotHeroBlue">#0082FF</color>
+    <!--    used my own colors to only target where needs to be changed rather than the whole app-->
+    <color name="statusBarColor">#005CB3</color>
+    <color name="actionBarColor">@color/spotHeroBlue</color>
+    <color name="actionBarTitleColor">#FFFFFF</color>
+
+    <color name="buttonColor">@color/spotHeroBlue</color>
 </resources>
