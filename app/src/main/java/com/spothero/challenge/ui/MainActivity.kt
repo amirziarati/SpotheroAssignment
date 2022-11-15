@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,7 +18,7 @@ import com.spothero.challenge.data.model.Address
 import com.spothero.challenge.data.model.Spot
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.*
 import com.spothero.challenge.data.SpotHeroApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -27,27 +26,28 @@ import io.reactivex.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
-    private val spots = mutableStateListOf<Spot>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val spots = remember { mutableStateOf<List<Spot>>(mutableListOf()) }
             SpotList(spots)
+            callSpotsApi(
+                onSuccess = { it ->
+                    spots.value = it
+                },
+                onFail = { throwable ->
+                    Log.e("FirstFragment", throwable.message ?: "onError")
+                })
         }
-        callSpotsApi(
-            onSuccess = { it ->
-               spots.addAll(it)
-            },
-            onFail = { throwable ->
-                Log.e("FirstFragment", throwable.message ?: "onError")
-            })
+
 
     }
 
     @Composable
-    fun SpotList(spots: List<Spot>) {
+    fun SpotList(spots: MutableState<List<Spot>>) {
         LazyColumn {
             items(
-                items = spots,
+                items = spots.value,
                 itemContent = {
                     SpotItem(it)
                 })
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             Row(modifier = Modifier.padding(10.dp)) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(spot.facilityPhoto)
+                        .data("file:/" + spot.facilityPhoto)
                         .crossfade(true)
                         .build(),
                     contentDescription = "Parking Spot Image",
@@ -87,35 +87,6 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-    }
-
-    @Preview
-    @Composable
-    fun PreviewMessageCard() {
-        SpotItem(
-            Spot(
-                1,
-                Address("85 queens wharf rd", "toronto", "ontario"),
-                "best place in world",
-                "24 mi",
-                "file:///android_asset/facility_photo_1.jpg",
-                2000
-            )
-        )
-    }
-
-    @Preview
-    @Composable
-    fun PreviewSpotList() {
-        val spot = Spot(
-            1,
-            Address("85 queens wharf rd", "toronto", "ontario"),
-            "best place in world",
-            "24 mi",
-            "file:///android_asset/facility_photo_1.jpg",
-            2000
-        )
-        SpotList(spots = mutableListOf(spot, spot, spot, spot, spot, spot))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

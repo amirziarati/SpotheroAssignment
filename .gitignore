@@ -64,3 +64,4 @@ app/src/.DS_Store
 .idea/checkstyle-idea.xml
 .idea/codeStyles/Project.xml
 .idea
+__MACOSX
