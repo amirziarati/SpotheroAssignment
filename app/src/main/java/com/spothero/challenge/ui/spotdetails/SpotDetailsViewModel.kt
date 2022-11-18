@@ -3,7 +3,7 @@ package com.spothero.challenge.ui.spotdetails
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.spothero.challenge.data.SpotRepo
+import com.spothero.challenge.data.SpotRepoImpl
 import com.spothero.challenge.data.model.Spot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SpotDetailsViewModel(spotRepo: SpotRepo, spotId: Int) :
+class SpotDetailsViewModel(spotRepo: SpotRepoImpl, spotId: Int) :
     ViewModel() {
 
     private val viewModelState = MutableStateFlow(SpotDetailsViewModelState(null))
@@ -31,7 +31,7 @@ class SpotDetailsViewModel(spotRepo: SpotRepo, spotId: Int) :
 
     companion object {
         fun provideFactory(
-            spotRepo: SpotRepo,
+            spotRepo: SpotRepoImpl,
             spotId: Int
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")

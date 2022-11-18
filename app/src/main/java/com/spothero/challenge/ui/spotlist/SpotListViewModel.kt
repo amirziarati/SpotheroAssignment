@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.spothero.challenge.data.SpotRepo
+import com.spothero.challenge.data.SpotRepoImpl
 import com.spothero.challenge.data.model.Spot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,7 +42,7 @@ class SpotListViewModel(private val spotRepo: SpotRepo) :
 
     companion object {
         fun provideFactory(
-            spotRepo: SpotRepo
+            spotRepo: SpotRepoImpl
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
