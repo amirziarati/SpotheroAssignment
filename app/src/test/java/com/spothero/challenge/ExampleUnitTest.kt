@@ -1,6 +1,6 @@
 package com.spothero.challenge
 
-import com.spothero.challenge.data.SpotHeroApi
+import com.spothero.challenge.data.remote.SpotHeroApi
 import com.spothero.challenge.data.model.Address
 import com.spothero.challenge.data.model.Spot
 import com.spothero.challenge.ui.spotlist.SpotListViewModel

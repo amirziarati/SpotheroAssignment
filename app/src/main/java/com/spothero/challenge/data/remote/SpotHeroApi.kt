@@ -1,4 +1,4 @@
-package com.spothero.challenge.data
+package com.spothero.challenge.data.remote
 
 import android.content.Context
 import com.spothero.challenge.data.model.Spot
@@ -10,6 +10,8 @@ import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.*
 import io.reactivex.Single
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 /**
  * API used to retrieve SpotHero spots.
@@ -50,6 +52,23 @@ class SpotHeroApi(context: Context) {
 
     /**
      * Retrieve all available spots.
+     * Suspended function for use with coroutines.
+     *
+     * @return List of Spots
+     * @see Spot
+     */
+    suspend fun getSpotsWithDelay(): List<Spot> = client.endpointGet("/spots")
+        .body<List<Spot>>().apply {
+            delay(3000) // to simulate slow api call
+        }
+        .map { spot ->
+            spot.apply {
+                facilityPhoto = PHOTO_LOCATION + facilityPhoto
+            }
+        }
+
+    /**
+     * Retrieve all available spots.
      *
      * @return Rx Single that emits list of Spots
      * @see Spot
@@ -58,6 +77,20 @@ class SpotHeroApi(context: Context) {
         runBlocking {
             launch(Dispatchers.IO) {
                 emitter.onSuccess(getSpots())
+            }
+        }
+    }
+
+    /**
+     * Retrieve all available spots.
+     *
+     * @return a Flow that emits list of Spots
+     * @see Spot
+     */
+    fun getSpotsFlow(): Flow<List<Spot>> = flow {
+        runBlocking {
+            launch(Dispatchers.IO) {
+                emit(getSpots())
             }
         }
     }

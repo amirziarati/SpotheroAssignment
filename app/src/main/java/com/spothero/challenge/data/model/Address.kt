@@ -1,5 +1,6 @@
 package com.spothero.challenge.data.model
 
+import androidx.room.Entity
 import kotlinx.serialization.Serializable
 
 @Serializable

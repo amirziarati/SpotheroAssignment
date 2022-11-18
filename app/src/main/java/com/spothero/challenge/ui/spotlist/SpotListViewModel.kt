@@ -3,7 +3,7 @@ package com.spothero.challenge.ui.spotlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.spothero.challenge.data.SpotHeroApi
+import com.spothero.challenge.data.SpotRepo
 import com.spothero.challenge.data.model.Spot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.update
 
-class SpotListViewModel(spotHeroApi: SpotHeroApi) :
+class SpotListViewModel(private val spotRepo: SpotRepo) :
     ViewModel() {
 
     private val viewModelState = MutableStateFlow(SpotListViewState(emptyList<Spot>()))
@@ -23,22 +23,35 @@ class SpotListViewModel(spotHeroApi: SpotHeroApi) :
 
     init {
         viewModelScope.launch {
-            viewModelState.update {
-                it.copy(latestSpots = spotHeroApi.getSpots().sortedBy { spot -> spot.price })
+            spotRepo.latestSpots.collect { newSpots ->
+                viewModelState.update {
+                    it.copy(
+                        latestSpots = newSpots.sortedBy { spot -> spot.price },
+                        isRefreshing = false
+                    )
+                }
             }
         }
     }
 
+    fun pullToRefresh() {
+        viewModelState.update { it.copy(isRefreshing = true) }
+        spotRepo.getFreshSpots()
+    }
+
     companion object {
         fun provideFactory(
-            spotHeroApi: SpotHeroApi,
+            spotRepo: SpotRepo
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SpotListViewModel(spotHeroApi) as T
+                return SpotListViewModel(spotRepo) as T
             }
         }
     }
 }
 
-data class SpotListViewState(val latestSpots: List<Spot>)
+data class SpotListViewState(
+    val latestSpots: List<Spot>,
+    val isRefreshing: Boolean = false
+)

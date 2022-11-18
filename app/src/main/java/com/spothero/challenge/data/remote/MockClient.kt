@@ -1,4 +1,4 @@
-package com.spothero.challenge.data
+package com.spothero.challenge.data.remote
 
 import android.content.Context
 import android.util.Log

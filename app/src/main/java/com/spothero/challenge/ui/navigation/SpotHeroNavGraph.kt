@@ -19,6 +19,7 @@ import com.spothero.challenge.ui.spotdetails.SpotDetailsScreen
 import com.spothero.challenge.ui.spotdetails.SpotDetailsViewModel
 import com.spothero.challenge.ui.spotlist.SpotListScreen
 import com.spothero.challenge.ui.spotlist.SpotListViewModel
+import kotlinx.coroutines.flow.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,7 +36,9 @@ fun SpotHeroNavGraph(
 
         composable(SpotHeroDestinations.HOME_ROUTE) {
             val spotListViewModel: SpotListViewModel = viewModel(
-                factory = SpotListViewModel.provideFactory(appDiContainer.spotHeroApi)
+                factory = SpotListViewModel.provideFactory(
+                    appDiContainer.spotRepo
+                )
             )
             Scaffold(topBar = {
                 SpotHeroAppBar(title = "Parking Spots", navController)
@@ -61,7 +64,10 @@ fun SpotHeroNavGraph(
 
             spotId?.let {
                 val spotDetailsViewModel: SpotDetailsViewModel = viewModel(
-                    factory = SpotDetailsViewModel.provideFactory(appDiContainer.spotHeroApi, spotId)
+                    factory = SpotDetailsViewModel.provideFactory(
+                        appDiContainer.spotRepo,
+                        spotId
+                    )
                 )
 
                 val streetAddress = spotDetailsViewModel.viewState.collectAsState()
@@ -80,7 +86,6 @@ fun SpotHeroNavGraph(
             }
 
         }
-
 
 
     }
