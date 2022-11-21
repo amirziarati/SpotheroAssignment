@@ -4,6 +4,7 @@ import com.spothero.challenge.data.SpotRepo
 import com.spothero.challenge.data.SpotRepoImpl
 import com.spothero.challenge.data.model.Address
 import com.spothero.challenge.data.model.Spot
+import com.spothero.challenge.data.remote.SpotHeroApi
 import com.spothero.challenge.ui.spotlist.SpotListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,6 +18,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import org.junit.Before
 import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 
 /**
@@ -26,12 +28,19 @@ import org.mockito.Mockito.mock
  */
 class ExampleUnitTest {
 
-    private val spotRepo = MyFakeRepo()
+    private val spotRepo = mock(SpotRepo::class.java)
     private val spotListViewModel: SpotListViewModel by lazy {
         SpotListViewModel(spotRepo)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = StandardTestDispatcher()
+
+    private val spot1 = getDummySpot(0)
+    private val spot2 = getDummySpot(10)
+    private val spot3 = getDummySpot(3)
+    private val spot4 = getDummySpot(1000)
+    private val spots = listOf(spot1, spot2, spot3, spot4)
 
     @Before
     fun setup() {
@@ -46,6 +55,7 @@ class ExampleUnitTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun spotsShouldBeOrderedByPrice() {
+        `when`(spotRepo.latestSpots).thenReturn(flow { emit(spots) })
 
         runTest {
             val actualList =
@@ -59,21 +69,4 @@ class ExampleUnitTest {
 
 }
 
-class MyFakeRepo : SpotRepo {
-    private val spot1 = getDummySpot(0)
-    private val spot2 = getDummySpot(10)
-    private val spot3 = getDummySpot(3)
-    private val spot4 = getDummySpot(1000)
-    private val spots = listOf(spot1, spot2, spot3, spot4)
-
-    override val latestSpots = flow {
-        emit(spots)
-    }
-
-    override fun getFreshSpots() {
-        //
-    }
-
-    private fun getDummySpot(price: Long) = Spot(1, Address("", "", ""), "", "", "", price)
-
-}
+private fun getDummySpot(price: Long) = Spot(1, Address("", "", ""), "", "", "", price)
